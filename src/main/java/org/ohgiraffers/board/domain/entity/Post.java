@@ -2,8 +2,8 @@ package org.ohgiraffers.board.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 
 /* Entity
  * 실제 세계의 객체나 개념을 소프트웨어 내에서 모델링 한 것으로, 데이터 베이스의 테이블에 해당하는 클래스
