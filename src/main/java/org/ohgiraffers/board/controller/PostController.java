@@ -10,7 +10,6 @@ import org.ohgiraffers.board.domain.dto.CreatePostRequest;
 import org.ohgiraffers.board.domain.dto.CreatePostResponse;
 import org.ohgiraffers.board.service.PostService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
