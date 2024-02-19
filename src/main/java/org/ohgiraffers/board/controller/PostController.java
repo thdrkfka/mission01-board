@@ -6,15 +6,11 @@ package org.ohgiraffers.board.controller;
  * 따라서 코드의 재사용성과 유지보수성을 높일 수 있음. */
 
 import lombok.RequiredArgsConstructor;
-import org.ohgiraffers.board.domain.dto.CreatePostRequest;
-import org.ohgiraffers.board.domain.dto.CreatePostResponse;
+import org.ohgiraffers.board.domain.dto.*;
 import org.ohgiraffers.board.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /* Controller RestController
  * Controller : 화면 반환
@@ -37,13 +33,31 @@ public class PostController { //controller 는 service 로 연결됨.
 
     private final PostService postService;
 
-    @PostMapping                                        //return 받을 애
+    @PostMapping         //저장 받은 DTO, return 받을 애
     public ResponseEntity<CreatePostResponse> postCreate(@RequestBody CreatePostRequest request) {
 
         CreatePostResponse response = postService.createPost(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
+    }
+
+    //postId로 조회
+    @GetMapping("/{postId}") //밑에 DTO(데이터 전달하는 객체) 들어가야 함.
+    public ResponseEntity<ReadPostResponse> postRead(@PathVariable Long postId) {
+
+        ReadPostResponse response = postService.readPostById(postId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //업데이트
+    @PutMapping("/{postId}")
+    public ResponseEntity<UpdatePostResponse> postUpdate(@PathVariable Long postId, @RequestBody UpdatePostRequest request) {
+
+        UpdatePostResponse response = postService.updatePost(postId, request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

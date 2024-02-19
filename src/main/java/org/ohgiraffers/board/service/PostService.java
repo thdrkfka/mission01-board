@@ -1,8 +1,8 @@
 package org.ohgiraffers.board.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.ohgiraffers.board.domain.dto.CreatePostRequest;
-import org.ohgiraffers.board.domain.dto.CreatePostResponse;
+import org.ohgiraffers.board.domain.dto.*;
 import org.ohgiraffers.board.domain.entity.Post;
 import org.ohgiraffers.board.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
  * 데이터베이스의 상태를 변화시키기 위해 수행하는 작업의 단위*/
 
 @Service //서비스 계층 이란 걸 알려주는 어노테이션
-@Transactional(readOnly = true)//조회시에는 딱히 필요x // crud 작업시에는 필요(ex. 개인 - 돈 받는 로직-> 은행 // 개인이나 은행에서 둘 중 하나의 로직이라도 이상 있으면 그냥 rollback 해서 없던 일로 만듬)
+//조회시에는 딱히 필요x // crud 작업시에는 필요(ex. 개인 - 돈 받는 로직-> 은행 // 개인이나 은행에서 둘 중 하나의 로직이라도 이상 있으면 그냥 rollback 해서 없던 일로 만듬)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor//final 사용할 때, required 생성자 필요
 public class PostService {//서비스는 repository랑 연결
 
@@ -34,6 +35,7 @@ public class PostService {//서비스는 repository랑 연결
     @Transactional
     public CreatePostResponse createPost(CreatePostRequest request) {
 
+        //데이터 저장
         Post post = Post.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
@@ -42,5 +44,28 @@ public class PostService {//서비스는 repository랑 연결
         Post savedPost = postRepository.save(post);
 
         return new CreatePostResponse(savedPost.getPostId(), savedPost.getTitle(), savedPost.getContent());
+    }
+
+    public ReadPostResponse readPostById(Long postId) { //조회만 할 것이니까 @Transactional 필요 x
+
+        Post foundPost = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
+
+        return new ReadPostResponse(foundPost.getPostId(), foundPost.getTitle(), foundPost.getContent());
+
+    }
+
+    @Transactional //데이터베이스의 상태 변경하니까 붙여줌.
+    public UpdatePostResponse updatePost(Long postId, UpdatePostRequest request) {
+
+        //확인
+        Post foundPost = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
+
+        // Dirty Checking : DB에서 변경된 사항이 감지되면 자동으로 변경해줌.
+        foundPost.update(request.getTitle(), request.getContent());
+
+        return new UpdatePostResponse(foundPost.getPostId(), foundPost.getTitle(), foundPost.getContent());
+
     }
 }
