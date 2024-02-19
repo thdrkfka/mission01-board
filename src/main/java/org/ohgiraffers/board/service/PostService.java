@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.ohgiraffers.board.domain.dto.*;
 import org.ohgiraffers.board.domain.entity.Post;
 import org.ohgiraffers.board.repository.PostRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +60,7 @@ public class PostService {//서비스는 repository랑 연결
     @Transactional //데이터베이스의 상태 변경하니까 붙여줌.
     public UpdatePostResponse updatePost(Long postId, UpdatePostRequest request) {
 
-        //확인
+        //id가 있는지 확인
         Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
 
@@ -68,4 +70,27 @@ public class PostService {//서비스는 repository랑 연결
         return new UpdatePostResponse(foundPost.getPostId(), foundPost.getTitle(), foundPost.getContent());
 
     }
+
+    @Transactional
+    public DeletePostResponse deletePost(Long postId) {
+
+        //id가 있는지 확인
+        Post foundPost = postRepository.findById(postId)
+                .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
+
+        postRepository.delete(foundPost);
+
+        return new DeletePostResponse(foundPost.getPostId());
+
+    }
+
+    //list 조회
+    public Page<ReadPostResponse> readAllPost(Pageable pageable) {
+
+        Page<Post> postsPage = postRepository.findAll(pageable);
+
+        return postsPage.map(post -> new ReadPostResponse(post.getPostId(), post.getTitle(), post.getContent()));
+
+    }
+
 }

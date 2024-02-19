@@ -8,6 +8,10 @@ package org.ohgiraffers.board.controller;
 import lombok.RequiredArgsConstructor;
 import org.ohgiraffers.board.domain.dto.*;
 import org.ohgiraffers.board.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +46,7 @@ public class PostController { //controller 는 service 로 연결됨.
 
     }
 
+    //@PathVariable :
     //postId로 조회
     @GetMapping("/{postId}") //밑에 DTO(데이터 전달하는 객체) 들어가야 함.
     public ResponseEntity<ReadPostResponse> postRead(@PathVariable Long postId) {
@@ -58,6 +63,30 @@ public class PostController { //controller 는 service 로 연결됨.
         UpdatePostResponse response = postService.updatePost(postId, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    //삭제
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<DeletePostResponse> postDelete(@PathVariable Long postId) {
+
+        DeletePostResponse response = postService.deletePost(postId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    //5개씩 끊어서 보여줌 => @PageableDefault(size = 몇개씩 끊어서 보냐,sort="어떤 기준으로", direction = 오름차,내림차)
+    //리스트 조회
+    @GetMapping
+    public ResponseEntity<Page<ReadPostResponse>> postReadAll(
+            @PageableDefault(size = 5, sort = "postId", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Page<ReadPostResponse> responses = postService.readAllPost(pageable);
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+
+
+
     }
 
 }
