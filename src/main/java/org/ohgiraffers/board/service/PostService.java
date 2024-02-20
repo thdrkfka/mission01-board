@@ -43,6 +43,7 @@ public class PostService {//서비스는 repository랑 연결
                 .content(request.getContent())
                 .build();
 
+        //입력한 데이터 저장
         Post savedPost = postRepository.save(post);
 
         return new CreatePostResponse(savedPost.getPostId(), savedPost.getTitle(), savedPost.getContent());
@@ -50,6 +51,7 @@ public class PostService {//서비스는 repository랑 연결
 
     public ReadPostResponse readPostById(Long postId) { //조회만 할 것이니까 @Transactional 필요 x
 
+        //예외 처리
         Post foundPost = postRepository.findById(postId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
 

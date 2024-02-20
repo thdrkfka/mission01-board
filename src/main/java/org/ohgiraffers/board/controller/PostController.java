@@ -101,8 +101,6 @@ public class PostController { //controller 는 service 로 연결됨.
 
         return new ResponseEntity<>(responses, HttpStatus.OK);
 
-
-
     }
 
 }
