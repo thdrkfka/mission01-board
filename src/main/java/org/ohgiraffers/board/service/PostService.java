@@ -67,6 +67,7 @@ public class PostService {//서비스는 repository랑 연결
                 .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
 
         // Dirty Checking : DB에서 변경된 사항이 감지되면 자동으로 변경해줌.
+        // update => PostRepository에서 DB의 변경된 사항이 감지되면 자동으로 변경
         foundPost.update(request.getTitle(), request.getContent());
 
         return new UpdatePostResponse(foundPost.getPostId(), foundPost.getTitle(), foundPost.getContent());
