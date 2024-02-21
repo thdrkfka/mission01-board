@@ -90,8 +90,13 @@ public class PostService {//서비스는 repository랑 연결
     //list 조회
     public Page<ReadPostResponse> readAllPost(Pageable pageable) {
 
+        //Page<T> : 페이지 정보를 담게 되는 인터페이스
+        //Pageable : 페이지 처리에 필요한 정보를 담게 되는 인터페이스
+
+        //Post 클래스를 타입으로 페이징처리,,
         Page<Post> postsPage = postRepository.findAll(pageable);
 
+        //findAll(pageable) => 필드를 다 찾겠다.// 다 찾은 값들=postsPage를 post필드로 5개씩 묶을 거다.
         return postsPage.map(post -> new ReadPostResponse(post.getPostId(), post.getTitle(), post.getContent()));
 
     }
