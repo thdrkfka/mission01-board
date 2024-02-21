@@ -21,10 +21,11 @@ import org.springframework.web.bind.annotation.*;
  * 따라서 코드의 재사용성과 유지보수성을 높일 수 있음. */
 
 /* Controller RestController
- * Controller : 화면 반환
+ * Controller : 화면 반환 // html 파일 랜더링함.
  *            : 주로 화면 View 를 반환하기 위해( return 뒤에 화면 경로 정해줄 때) 사용한다.
  *            : 하지만 종종 Controller를 쓰면서도 데이터를 반환해야 할 때가 있는데, 이럴 때 사용하는 것이 @ResponseBody(api로 요청할 때 받아야할 값, 데이터 반환할 때 사용)
  * RestController : @Controller + @ResponseBody : 화면 + 데이터 반환
+ *                : rest api를 구축 시, 데이터를 반환하는 어노테이션 => json 파일 주고받음.
  *
  * REST 란?
  * Representational Astate Transfer 의 약자

@@ -56,7 +56,7 @@ public class PostServiceTest {
     }
 
     //give : 테스트 시 필요한 파라미터를 준비한다.
-    //when : 테스할 메소드를 호출한다.
+    //when : 테스트할 메소드를 호출한다.
     //then : 실행 결과를 검증한다.
 
     @Test

@@ -30,14 +30,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * 통합테스트는 API의 모든 과정이 올바르게 동작하는지 확인하는 것
  *
  * 단위(유닛)테스트 :
- * 하나의 모듈을 기준으로 독립적으로 진해외는 가장 작은 단위의 테스트(작은 단위 = 함수, 메소드)
+ * 하나의 모듈을 기준으로 독립적으로 진행되는 가장 작은 단위의 테스트(작은 단위 = 함수, 메소드)
  * 단위테스트는 어플리케이션을 구성하는 하나의 기능이 올바르게 동작하는지 독립적으로 테스트 하는 것
  * */
 
 /* @WebMvcTest
  * MVC 를 위한 테스트. 컨트롤러가 예상대로 동작하는지 테스트하는 데 사용된다.
  * 웹 어플리케이션을 어플리케이션 서버에 배포하지 않고 테스트용 MVC 환경을 만들어 요청 및 전송 응답기능을 제공해준다.
+ * => 전체 어플리케이션의 컨텍스트를 로드 => 상호 작용(request/response 요청)을 하는지 본다.
  * */
+
 @WebMvcTest(PostController.class) //테스트할 클래스 이름
 public class PostControllerTest {
 
@@ -76,9 +78,13 @@ public class PostControllerTest {
 
         //when & then
 
-        //request로 요청을 보내는 테스트 하려는 환경 만들어줌.
-        mockMvc.perform(post("/api/v1/posts")
-                .contentType(MediaType.APPLICATION_JSON)
+
+        //MockMvc => http 에 요청을 보내서
+        //ResponseEntity
+
+        //mockMvc의 역할 : httprequest로 요청을 보내는 역할
+        mockMvc.perform(post("/api/v1/posts") /* 테스트 하려는 환경을 어디서 할 것인지에 대한 경로 */
+                .contentType(MediaType.APPLICATION_JSON) /* 테스트 하려는 환경 */
                 .content(objectMapper.writeValueAsBytes(request))
         )
                 .andExpect(status().isOk())
@@ -159,9 +165,11 @@ public class PostControllerTest {
     void read_all_post_test() throws Exception{
 
         //given
-        int page = 0;
-        int size = 5;
-        PageRequest pageRequest = PageRequest.of(page, size);
+//        int page = 0;
+//        int size = 5;
+//        PageRequest pageRequest = PageRequest.of(page, size);
+
+        PageRequest pageRequest = PageRequest.of(0, 5);
 
         ReadPostResponse readPostResponse = new ReadPostResponse(1L, "리스트 제목","리스트 내용");
 
