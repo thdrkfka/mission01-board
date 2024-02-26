@@ -97,6 +97,7 @@ public class PostService {//서비스는 repository랑 연결
         Page<Post> postsPage = postRepository.findAll(pageable);
 
         //findAll(pageable) => 필드를 다 찾겠다.// 다 찾은 값들=postsPage를 post필드로 5개씩 묶을 거다.
+        //map() : 모든 값들을 다 선언하면서 일일이 postPage에 넣어 줄 수 없으니, map 함수를 활용하여 값들을 postId,title,content 3개가 묶여서 여러개가 저장됨.
         return postsPage.map(post -> new ReadPostResponse(post.getPostId(), post.getTitle(), post.getContent()));
 
     }
